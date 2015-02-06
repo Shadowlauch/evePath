@@ -98,26 +98,27 @@ class evePath {
             $X = trim(array_shift($R));
 
             foreach($this->jumpArray[$X] as $Y){
-                if($this->securityArray[$Y] < $minSecurity) continue;
-                $Y = trim($Y);
-                // See if we got a solution
-                if ($Y == $toSystemID){
-                    // We did? Construct a result path then
-                    array_push($P, $toSystemID);
-                    array_push($P, $X);
-                    while ($V[$X] != $fromSystemID){
-                        array_push($P, trim($V[$X]));
-                        $X = $V[$X];
+                if($this->securityArray[$Y] >= $minSecurity){
+                    $Y = trim($Y);
+                    // See if we got a solution
+                    if ($Y == $toSystemID){
+                        // We did? Construct a result path then
+                        array_push($P, $toSystemID);
+                        array_push($P, $X);
+                        while ($V[$X] != $fromSystemID){
+                            array_push($P, trim($V[$X]));
+                            $X = $V[$X];
+                        }
+                        array_push($P, $fromSystemID);
+                        return array_reverse($P);
                     }
-                    array_push($P, $fromSystemID);
-                    return array_reverse($P);
-                }
-                // First time we visit this node?
-                if (!array_key_exists($Y, $V)){
-                    // Store the path so we can track it back,
-                    $V[$Y] = $X;
-                    // and add it to the "within reach" list
-                    array_push($R, $Y);
+                    // First time we visit this node?
+                    if (!array_key_exists($Y, $V)){
+                        // Store the path so we can track it back,
+                        $V[$Y] = $X;
+                        // and add it to the "within reach" list
+                        array_push($R, $Y);
+                    }
                 }
             }
 	}
